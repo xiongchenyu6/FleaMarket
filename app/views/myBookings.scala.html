@@ -1,0 +1,46 @@
+@import controllers.AssetsFinder
+@import org.webjars.play.WebJarsUtil
+@(implicit assets: AssetsFinder, webJarsUtil: WebJarsUtil)
+
+@Html(webJarsUtil.script("jspdf.min.js"))
+@Html(webJarsUtil.script("html2canvas.js"))
+@layout("我的预约",Seq(assets.path("javascript/myBookings.js")
+), Seq()){
+    <div>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary active">
+                <input type="radio" name="options" id="option1" autocomplete="off" checked> 我的申请
+            </label>
+            <label class="btn btn-secondary">
+                <input type="radio" name="options" id="option2" autocomplete="off"> 我的消息
+            </label>
+        </div>
+    </div>
+    <div>
+        <table class="bookings">
+            <thead>
+                <tr>
+                    <th>订单号</th>
+                    <th>摊位图片</th>
+                    <th>摊位名称</th>
+                    <th>订单状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            @for(booking<-Booking.find.query().where().findList()){
+                <tr id="ID@booking.getId">
+                    <td>@booking.getId</td>
+                    <td><img class="outletImage" src="@assets.path(s"upload/${booking.getId}.jpg")" alt="没有图片"></td>
+                    <td>@booking.getOutletName</td>
+                    <td>@booking.getStatus</td>
+                <td>
+                    <a href="@booking.getCancelUrl">取消申请</a>
+                    <a href="#" onclick="generatePDF(@booking.getId)">输出凭证</a>
+                </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

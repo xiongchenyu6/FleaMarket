@@ -1,0 +1,35 @@
+@import controllers.AssetsFinder
+@import org.webjars.play.WebJarsUtil
+@(implicit assets: AssetsFinder, webJarsUtil: WebJarsUtil)
+
+@layout("预约列表",Seq(), Seq()){
+    <div>
+        <table class="bookings">
+            <thead>
+                <tr>
+                    <th>订单号</th>
+                    <th>摊位图片</th>
+                    <th>摊位名称</th>
+                    <th>订单状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            @for(booking<-Booking.find.query().where().eq("status",Booking.PENDING).findList()){
+                <tr>
+                    <td>@booking.getId</td>
+                    <td><img src="@assets.path(s"upload/${booking.getId}.jpg")" alt="没有图片"></td>
+                    <td>@booking.getOutletName</td>
+                    <td>@booking.getStatus</td>
+                    <td>待审核</td>
+                    <td>
+                <td>
+                    <a href="@booking.getAcceptUrl">通过申请</a>
+                    <a href="@booking.getRejectedUrl" >拒绝申请</a>
+                </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

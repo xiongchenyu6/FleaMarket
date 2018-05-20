@@ -1,0 +1,21 @@
+.carousel-inner{
+    height: 250px;
+}
+.content{
+    display: grid;
+    grid-template: 250px 250px 100%/ 70% 30%;
+}
+
+.carousel{
+    grid-area: 1 /1/2/3;
+}
+.outlets{
+   grid-area: 2/1/4/2;
+}
+.userInfo{
+    grid-area: 2/2/3/3;
+}
+.messageBoard{
+
+    grid-area: 3/2/4/3;
+}

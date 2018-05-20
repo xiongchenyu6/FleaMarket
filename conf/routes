@@ -1,8 +1,27 @@
-
+GET         /assets/*file                                                       controllers.Assets.versioned(file)
+->          /webjars                                                            webjars.Routes
 GET     /                           controllers.HomeController.showHomePage
-GET 	/outletBooking				controllers.OutletController.outletBooking
-GET 	/myBooking					controllers.OutletController.myBooking
-GET 	/login						controllers.UserController.login
-POST 	/login						controllers.UserController.sendLogin
-# Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+
+# Account
+GET     /signup                     controllers.Auth.signUpPage
+POST    /signup                     controllers.Auth.signUp
+GET 	/login						controllers.Auth.loginPage
+POST 	/login						controllers.Auth.signIn
+
+GET     /logout                     controllers.Auth.logout
+
+# Outlet
+GET 	/outletBooking				controllers.OutletController.outletBookingPage
+GET 	/myBooking					controllers.OutletController.myBookingPage
+POST    /book                       controllers.OutletController.book
+GET    /cancel                      controllers.OutletController.cancel(id:Long)
+
+GET 	/outletManagement       	controllers.OutletController.outletManagementPage
+# Admin API
+GET    /bookings                   controllers.OutletController.bookingsPage
+GET    /accept                     controllers.OutletController.accept(id:Long)
+GET    /reject                     controllers.OutletController.reject(id:Long)
+GET     /newOutlet                   controllers.OutletController.create(name:String)
+GET     /forbidOutlet               controllers.OutletController.forbid(id:Long)
+GET     /activeOutlet               controllers.OutletController.active(id:Long)
+

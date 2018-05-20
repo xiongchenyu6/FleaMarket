@@ -1,0 +1,75 @@
+@import controllers.AssetsFinder
+@import org.webjars.play.WebJarsUtil
+@import play.twirl.api.Html
+@import models.Booking
+@import b4.inline.fieldConstructor
+@import play.api.i18n.Messages
+@import helper._
+
+@(implicit assets: AssetsFinder, webJarsUtil: WebJarsUtil)
+
+@layout("请选择要预约的摊位",Seq(assets.path("javascript/bookOutlet.js")),Seq(assets.path("stylesheet/bookOutlet.css"))){
+
+    @helper.form(CSRF(routes.OutletController.book()),'enctype -> "multipart/form-data",'class -> "form") {
+
+        <div class="form-label-group">
+            <label for="matricNo">摊位名称</label>
+            <input type="text" id="matricNo" class="form-control" name="outletName" required autofocus>
+        </div>
+        <div class="form-label-group">
+            <label for="passwrod">摊位简介</label>
+            <input type="text" id="passwrod" class="form-control" name="outletIntro" required>
+        </div>
+        <div class="form-label-group">
+            <label for="paswrod">QQ</label>
+            <input type="number" id="paswrod" class="form-control" name="qqNo" required>
+        </div>
+        <div class="form-label-group">
+            <label for="password">电话</label>
+            <input type="number" id="password" class="form-control" name="phone" required>
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlFile1">摊位照片</label>
+            <input type="file" accept="image/*" class="form-control-file" name="photo" id="exampleFormControlFile1">
+        </div>
+
+        <div class="form-group">
+            <label for="exampleFormControlFile1">摊位号码(右侧选择)</label>
+            <input type="number" id="outletId" class="form-control" name="outletId" readonly required>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">提交</button>
+        <button class="btn btn-lg btn-primary btn-block" type="reset">重置</button>
+    }
+
+    <img src="@assets.path("images/road.jpg")" alt="我是一条马路" class="road1 road"/>
+
+    <img src="@assets.path("images/road.jpg")" alt="我是一条马路" class="road2 road"/>
+
+    <div class="unused1">这里貌似不可用摆摊哦</div>
+    <div class="unused2">不可以</div>
+    <div class="unused3">反正还是不可以</div>
+
+    <div class="canteen8">
+        八食堂
+    </div>
+
+    <div class="canteen2">
+        二食堂
+    </div>
+
+    @for(outlet<-Outlet.find.query().where().findList()){
+                <div class="outlet" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">@outlet.getId</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">@outlet.getOutletName</h6>
+                        <p class="card-text">@outlet.getStatus</p>
+                        @if(outlet.isAvailable) {
+                            <button onclick="book('@outlet.getId')" type="button" class="btn btn-success">选择</button>
+                        }else {
+                            <button disabled type="button" class="btn btn-danger">不可用</button>
+                        }
+                    </div>
+                </div>
+    }
+}

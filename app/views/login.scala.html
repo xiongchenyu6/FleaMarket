@@ -1,14 +1,43 @@
+@import b4.inline.fieldConstructor
+@import controllers.AssetsFinder
+@import models.User
+@import org.webjars.play.WebJarsUtil
+@import play.api.i18n.Messages
+@import helper._
+
+@(form: Form[User])(implicit assets: AssetsFinder, webJarsUtil: WebJarsUtil)
+
 @layout("登录页面") {
-	<form class="form-signin offset-4 col-4" action="/login" method="POST">
-	<h1 class="h3 mb-3 font-weight-normal">请登录</h1>
-	<div class="form-label-group">
-        <input type="text" id="matricNo" class="form-control" name="matricNo" required autofocus>
-        <label for="matricNo">学号</label>
-      </div>
-	<div class="form-label-group">
-        <input type="password" id="passwrod" class="form-control" name="password" required>
-        <label for="passwrod">密码</label>
-      </div>
-	<button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
-</form>
+        <!-- /.login-logo -->
+    <div class="login-box-body" >
+        <p class="login-box-msg">Admin Login</p>
+
+        @if(flash.containsKey("error")) {
+            <p class="error">
+        <div class="alert alert-danger">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            @flash.get("error")
+        </div>
+            </p>
+        }
+
+        @helper.form(CSRF(routes.Auth.signIn)) {
+
+            @b4.inputWrapped("text", form("matricNo"),
+                '_showIconOnError -> true,
+                '_label -> "学号", 'placeholder -> "example@mail.com") { implicit input =>
+              @input
+            }
+            @b4.inputWrapped("password", form("password"), '_label -> "密码",
+                '_showIconOnError -> true,
+                'placeholder -> "******") { implicit input =>
+                @input
+            }
+            <div class="form-group">
+                <div>
+                    <button id="submit" type="submit" value="submit" class="btn btn-lg btn-primary btn-block">@Messages("SignIn")</button>
+                </div>
+            </div>
+        }
+    </div>
 }

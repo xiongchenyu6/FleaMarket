@@ -1,0 +1,61 @@
+@import controllers.AssetsFinder
+@import org.webjars.play.WebJarsUtil
+@import models.Outlet
+
+@(implicit assets: AssetsFinder, webJarsUtil: WebJarsUtil)
+
+@layout("请管理摊位",Seq(),Seq(assets.path("stylesheet/outletManagement.css"))){
+    <table class="table">
+        <thead>
+            <tr>
+                <th>摊位号</th>
+                <th>摊位名称</th>
+                <th>摊位状态</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        @for(outlet<-Outlet.find.query().where().findList()){
+            <tr>
+                <td>@outlet.getId</td>
+                <td>@outlet.getOutletName</td>
+                <td>@outlet.getStatus</td>
+                @if(outlet.isAvailable) {
+                    <td><a href="@outlet.getDeleteUrl">禁止摊位</a></td>
+                }else {
+                    <td><a href="@outlet.getActiveUrl">激活摊位</a></td>
+                }
+            </tr>
+            }
+        </tbody>
+    </table>
+        <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+        添加摊位
+    </button>
+
+        <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">创建新摊位</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/newOutlet">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">名称</label>
+                            <input type="text" name="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="6666666">
+                            <small id="emailHelp" class="form-text text-muted">一定要起个可爱的名字</small>
+                        </div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary">保存</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}

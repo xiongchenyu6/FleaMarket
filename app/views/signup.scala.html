@@ -1,0 +1,62 @@
+@import controllers.AssetsFinder
+@import org.webjars.play.WebJarsUtil
+@import play.twirl.api.Html
+@import models.User
+@import b4.inline.fieldConstructor
+@import play.api.i18n.Messages
+@import helper._
+
+@(form: Form[User])(implicit assets: AssetsFinder, webJarsUtil: WebJarsUtil)
+
+@school = @{
+    Seq("材料科学与工程学院"->"材料科学与工程学院"
+    ,"文学院"->"文学院",
+        "数学科学学院"->"数学科学学院","资源与环境学院" -> "资源与环境学院" , "化学化工学院" -> "化学化工学院")
+}
+@layout("注册账号") {
+    <div class="login-box-body" >
+
+        @if(form.hasGlobalErrors) {
+            <p class="error">
+            @for(error <- form.globalErrors) {
+                <div class="col-md-6 col-md-offset-3 alert alert-danger">
+                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                    @error
+                </div>
+            }
+            </p>
+        }
+
+        @helper.form(CSRF(routes.Auth.signUp())) {
+
+            @b4.inputWrapped("text", form("name"), '_label -> "姓名", 'placeholder -> "Tom Jerry") { implicit input =>
+              @input
+            }
+            @b4.inputWrapped("password", form("password"), '_label -> "密码",
+                '_showIconOnError -> true,
+                'placeholder -> "******") { implicit input =>
+                @input
+            }
+            @b4.inputWrapped("text", form("matricNo"), '_label -> "学号", 'placeholder -> "我也不知道学号长啥样") { implicit input =>
+                @input
+            }
+            @b4.inputType("number", form("qqNo"),
+                '_showIconOnError -> true,
+                '_label -> "QQ", 'placeholder -> "123456")
+            @b4.inputType("number", form("phone"),
+                '_showIconOnError -> true,
+                '_label -> "Contact",
+                'placeholder -> "6598765432")
+            @b4.select(form("school"),
+                 school,
+                '_label -> "请选择学院",
+                '_default -> "选吧"
+                )
+            <div class="form-group">
+                <div>
+                    <button id="submit" type="submit" value="submit" class="btn btn-lg btn-primary btn-block">@Messages("注册")</button>
+                </div>
+            </div>
+        }
+    </div>
+}
