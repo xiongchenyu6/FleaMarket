@@ -45,8 +45,6 @@ public class AuthAction extends Action<Authentication> {
             return failAuth(ctx);
         else
             return delegate.call(ctx);
-
-
     }
 
     private CompletionStage<Result> failAuth(Http.Context ctx) {
